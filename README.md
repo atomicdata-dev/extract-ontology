@@ -6,12 +6,18 @@ Extracts an ontology from an AtomicServer and saves it to a JSON file.
 
 - [Deno](https://deno.com/runtime)
 
-## Installation
-
 ## Usage
+
+clone this repo, navigate to the directory and run:
 
 ```bash
 deno task extract --in <input-url> --out <output-file>
+```
+
+example:
+
+```bash
+deno task extract --in https://atomicdata.dev/ontology/core --out ../my-projects/data/core.json
 ```
 
 ## Using an agent
