@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "extract": "deno run --allow-net --allow-read --allow-write --allow-env ./src/main.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@tomic/lib": "npm:@tomic/lib@^0.40.0"
+  }
+}
