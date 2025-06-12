@@ -21,10 +21,11 @@ import 'jsr:@std/dotenv/load';
 import { parseArgs } from 'jsr:@std/cli/parse-args';
 
 class Mapping {
-  private mapping: Map<string, string>;
+  private mapping: Map<string, string> = new Map();
+  private ontologySubject: string;
 
-  constructor() {
-    this.mapping = new Map();
+  constructor(ontologySubject: string) {
+    this.ontologySubject = ontologySubject;
   }
 
   add(subject: string) {
@@ -46,7 +47,19 @@ class Mapping {
   }
 
   private subjectToLocalId(subject: string) {
-    return new URL(subject).pathname.slice(1);
+    if (subject === this.ontologySubject) {
+      return new URL(subject).pathname.slice(1);
+    }
+
+    const newId = subject.replace(this.ontologySubject, '');
+
+    if (newId === subject) {
+      throw new Error(
+        `Resource ${subject} is not a child of this ontology and cannot be mapped to a localId`,
+      );
+    }
+
+    return newId.slice(1);
   }
 }
 
@@ -104,7 +117,7 @@ async function extractOntology(url: string) {
     ...(ontology.props.instances ?? []),
   ];
 
-  const localIdMapping = new Mapping();
+  const localIdMapping = new Mapping(ontology.subject);
 
   for (const subject of subjects) {
     localIdMapping.add(subject);
