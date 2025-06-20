@@ -23,9 +23,11 @@ import { parseArgs } from 'jsr:@std/cli/parse-args';
 class Mapping {
   private mapping: Map<string, string> = new Map();
   private ontologySubject: string;
+  private ontologyPath: string;
 
   constructor(ontologySubject: string) {
     this.ontologySubject = ontologySubject;
+    this.ontologyPath = new URL(ontologySubject).pathname.slice(1);
   }
 
   add(subject: string) {
@@ -48,10 +50,10 @@ class Mapping {
 
   private subjectToLocalId(subject: string) {
     if (subject === this.ontologySubject) {
-      return new URL(subject).pathname.slice(1);
+      return this.ontologyPath;
     }
 
-    const newId = subject.replace(this.ontologySubject, '');
+    const newId = subject.replace(this.ontologySubject, this.ontologyPath);
 
     if (newId === subject) {
       throw new Error(
@@ -59,7 +61,7 @@ class Mapping {
       );
     }
 
-    return newId.slice(1);
+    return newId;
   }
 }
 
